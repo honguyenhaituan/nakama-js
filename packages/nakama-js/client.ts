@@ -873,19 +873,19 @@ export class Client {
   }
 
   /** Import Facebook friends and add them to a user's account. */
-  async importFacebookFriends(session: Session, request: ApiAccountFacebook): Promise<boolean> {
+  async importFacebookFriends(session: Session, request: ApiAccountFacebook, reset?: boolean): Promise<boolean> {
     if (this.autoRefreshSession && session.refresh_token &&
         session.isexpired((Date.now() + this.expiredTimespanMs)/1000)) {
         await this.sessionRefresh(session);
     }
 
-    return this.apiClient.importFacebookFriends(session.token, request).then((response: any) => {
+    return this.apiClient.importFacebookFriends(session.token, request, reset).then((response: any) => {
       return response !== undefined;
     });
   }
 
     /** Import Steam friends and add them to a user's account. */
-  async importSteamFriends(session: Session, request: ApiAccountSteam, reset: boolean): Promise<boolean> {
+  async importSteamFriends(session: Session, request: ApiAccountSteam, reset?: boolean): Promise<boolean> {
     if (this.autoRefreshSession && session.refresh_token &&
         session.isexpired((Date.now() + this.expiredTimespanMs)/1000)) {
         await this.sessionRefresh(session);
@@ -1108,13 +1108,13 @@ export class Client {
   }
 
   /** List groups based on given filters. */
-  async listGroups(session: Session, name?: string, cursor?: string, limit?: number): Promise<GroupList> {
+  async listGroups(session: Session, name?: string, cursor?: string, limit?: number, langTag?:string, members?:number, open?:boolean, options: any = {}): Promise<GroupList> {
     if (this.autoRefreshSession && session.refresh_token &&
         session.isexpired((Date.now() + this.expiredTimespanMs)/1000)) {
         await this.sessionRefresh(session);
     }
 
-    return this.apiClient.listGroups(session.token, name, cursor, limit).then((response: ApiGroupList) => {
+    return this.apiClient.listGroups(session.token, name, cursor, limit, langTag, members, open, options).then((response: ApiGroupList) => {
       var result: GroupList = {
         groups: []
       };
